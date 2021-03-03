@@ -7,12 +7,12 @@ namespace PhotoBook.PhotoBooks
     public class PhotoBookPageM : PhotoBookPage
     {
         public override PageSize Size { get; }
-        public override IList<Photo> Photos { get; }
+        public override IList<Photo> PhotosPage { get; }
 
         public PhotoBookPageM()
         {
             Size = PageSize.Size23x31;
-            Photos = new List<Photo>();
+            PhotosPage = new List<Photo>();
         }
         
         public override void AddPhoto(Photo photo)

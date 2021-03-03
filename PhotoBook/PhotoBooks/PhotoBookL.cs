@@ -6,6 +6,16 @@ namespace PhotoBook.PhotoBooks
     {
         public IList<PhotoBookPageL> Pages { get; }
 
+        public PhotoBookL(int pagesNo)
+        {
+            Pages = new List<PhotoBookPageL>();
+            
+            for (int i = 0; i < pagesNo; i++)
+            {
+                Pages.Add(new PhotoBookPageL());
+            }
+        }
+
         public void AddPhotoToPhotoBook(PhotoBookPageL page)
         {
             throw new System.NotImplementedException();
