@@ -16,19 +16,19 @@ namespace PhotoBook.PhotoBooks
         {
         }
 
-        public PhotoBookS CreatePhotoBookS(int pageNo)
+        public static PhotoBookS CreatePhotoBookS(int pageNo)
         {
-            return new PhotoBookS(pageNo);
+            return new(30);
         }
         
-        public PhotoBookM CreatePhotoBookM(int pageNo)
+        public static PhotoBookM CreatePhotoBookM(int pageNo)
         {
-            return new PhotoBookM(pageNo);
+            return new(pageNo);
         }
         
-        public PhotoBookL CreatePhotoBookL(int pageNo)
+        public static PhotoBookL CreatePhotoBookL(int pageNo)
         {
-            return new PhotoBookL(pageNo);
+            return new(pageNo);
         }
     }
 }

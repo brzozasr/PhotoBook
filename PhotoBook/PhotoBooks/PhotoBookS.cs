@@ -2,13 +2,13 @@ using System.Collections.Generic;
 
 namespace PhotoBook.PhotoBooks
 {
-    public class PhotoBookS : IPhotoBook<PhotoBookPageS>
+    public class PhotoBookS : IPhotoBook<PhotoBookPage>
     {
-        public IList<PhotoBookPageS> Pages { get; }
+        public IList<PhotoBookPage> Pages { get; }
 
         public PhotoBookS(int pagesNo)
         {
-            Pages = new List<PhotoBookPageS>();
+            Pages = new List<PhotoBookPage>();
             
             for (int i = 0; i < pagesNo; i++)
             {
@@ -16,17 +16,17 @@ namespace PhotoBook.PhotoBooks
             }
         }
         
-        public void AddPhotoToPhotoBook(PhotoBookPageS page)
+        public void AddPhotoToPhotoBook(PhotoBookPage page)
         {
             throw new System.NotImplementedException();
         }
 
-        public void RemovePhotoFromPhotoBook(PhotoBookPageS page)
+        public void RemovePhotoFromPhotoBook(PhotoBookPage page)
         {
             throw new System.NotImplementedException();
         }
 
-        public PhotoBookPageS ShowPageByPageNo(int pageNo)
+        public PhotoBookPage ShowPageByPageNo(int pageNo)
         {
             throw new System.NotImplementedException();
         }
