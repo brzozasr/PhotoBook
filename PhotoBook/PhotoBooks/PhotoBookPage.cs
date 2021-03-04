@@ -10,7 +10,7 @@ namespace PhotoBook.PhotoBooks
         public abstract PageSize Size { get; }
         public abstract IList<Photo> PhotosPage { get; }
         
-        public abstract void AddPhoto(Photo photo);
+        public abstract bool AddPhoto(Photo photo);
         public abstract void RemovePhoto(Photo photo);
         public abstract Photo ShowPhotoByName(string name);
 

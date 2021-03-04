@@ -11,9 +11,10 @@ namespace PhotoBook
             var pbM = SingletonPhotoBook.CreatePhotoBookM(30);
             var pbL = SingletonPhotoBook.CreatePhotoBookL(30);
 
-            ShowPhotoBooks photoBooks = new ShowPhotoBooks(pbS, pbM, pbL);
+            PhotoBooksController photoBooksController = new PhotoBooksController(pbS, pbM, pbL);
             
-            photoBooks.Display(1);
+            photoBooksController.AddPhotosToBookL(190);
+            photoBooksController.Display(1);
         }
     }
 }

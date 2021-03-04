@@ -15,9 +15,21 @@ namespace PhotoBook.PhotoBooks
             PhotosPage = new List<Photo>();
         }
         
-        public override void AddPhoto(Photo photo)
+        public override bool AddPhoto(Photo photo)
         {
-            throw new System.NotImplementedException();
+            var allPhotosSize = 0;
+            foreach (var p in PhotosPage)
+            {
+                allPhotosSize += (int) p.Size;
+            }
+            
+            if ((int) Size >= allPhotosSize + (int) photo.Size)
+            {
+                PhotosPage.Add(photo);
+                return true;
+            }
+
+            return false;
         }
 
         public override void RemovePhoto(Photo photo)

@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using PhotoBook.Photos;
 
 namespace PhotoBook.PhotoBooks
 {
-    public class PhotoBookS : IPhotoBook<PhotoBookPage>
+    public class PhotoBookS : IPhotoBook<PhotoBookPage, Photo>
     {
         public IList<PhotoBookPage> Pages { get; }
 
@@ -16,17 +17,22 @@ namespace PhotoBook.PhotoBooks
             }
         }
         
-        public void AddPhotoToPhotoBook(PhotoBookPage page)
+        public bool AddPhotoToPhotoBook(Photo photo)
         {
-            throw new System.NotImplementedException();
+            foreach (var page in Pages)
+            {
+                var isAdded = page.AddPhoto(photo);
+
+                if (isAdded)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
-        public void RemovePhotoFromPhotoBook(PhotoBookPage page)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public PhotoBookPage ShowPageByPageNo(int pageNo)
+        public void RemovePhotoFromPhotoBook(Photo photo)
         {
             throw new System.NotImplementedException();
         }
