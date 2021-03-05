@@ -1,27 +1,173 @@
 @startuml
 'https://plantuml.com/class-diagram
 
-abstract class AbstractList
-abstract AbstractCollection
-interface List
-interface Collection
-
-List <|-- AbstractList
-Collection <|-- AbstractCollection
-
-Collection <|- List
-AbstractCollection <|- AbstractList
-AbstractList <|-- ArrayList
-
-class ArrayList {
-Object[] elementData
-size()
+interface IPhotoBook<T1, in T2>{
+IList<T1> Pages
+bool AddPhotoToPhotoBook(T2 photo)
 }
 
-enum TimeUnit {
-DAYS
-HOURS
-MINUTES
+class SingletonPhotoBookS{
+- static Lazy<SingletonPhotoBookS> _photoBook
+- private static readonly object Lock
++ static SingletonPhotoBookL GetInstance(int pagesNo)
++ bool AddPhotoToPhotoBook(Photo photo)
 }
+
+class SingletonPhotoBookM{
+- static Lazy<SingletonPhotoBookM> _photoBook
+- private static readonly object Lock
++ static SingletonPhotoBookL GetInstance(int pagesNo)
++ bool AddPhotoToPhotoBook(Photo photo)
+}
+
+class SingletonPhotoBookL{
+- static Lazy<SingletonPhotoBookL> _photoBook
+- private static readonly object Lock
++ static SingletonPhotoBookL GetInstance(int pagesNo)
++ bool AddPhotoToPhotoBook(Photo photo)
+}
+
+abstract class PhotoBookPage{
++abstract PageSize Size
++abstract IList<Photo> PhotosPage
++abstract bool AddPhoto(Photo photo)
+}
+
+class PhotoBookPageS{
++ PageSize Size
++ IList<Photo> PhotosPage
++ bool AddPhoto(Photo photo)
+}
+
+class PhotoBookPageM{
++ PageSize Size
++ IList<Photo> PhotosPage
++ bool AddPhoto(Photo photo)
+}
+
+class PhotoBookPageL{
++ PageSize Size
++ IList<Photo> PhotosPage
++ bool AddPhoto(Photo photo)
+}
+
+abstract class Photo{
++ abstract string Name
++ abstract PhotoType Type
++ abstract PhotoSize Size
++ abstract string CreationDate
+}
+
+class PhotoBMP{
++ string Name
++ PhotoType Type
++ PhotoSize Size
++ string CreationDate
+}
+
+class PhotoGIF{
++ string Name
++ PhotoType Type
++ PhotoSize Size
++ string CreationDate
+}
+
+class PhotoJPG{
++ string Name
++ PhotoType Type
++ PhotoSize Size
++ string CreationDate
+}
+
+class PhotoPNG{
++ string Name
++ PhotoType Type
++ PhotoSize Size
++ override string CreationDate
+}
+
+class PhotoRAW{
++ string Name
++ PhotoType Type
++ PhotoSize Size
++ string CreationDate
+}
+
+class PhotoTIFF{
++ string Name
++ PhotoType Type
++ PhotoSize Size
++ string CreationDate
+}
+
+class PhotoFactory {
++ {static} Photo GetRandomPhoto()
+}
+
+enum PageSize {
+Size15x21 = 315
+Size23x31 = 713
+Size30x42 = 1260
+}
+
+enum PhotoBookType {
+S
+M
+L
+}
+
+enum PhotoSize {
+Size9x13 = 117
+Size10x15 = 130
+Size13x18 = 234
+Size15x20 = 300
+}
+
+enum PhotoType {
+JPG
+PNG
+GIF
+TIFF
+RAW
+BMP
+}
+
+class PhotoBooksController {
+- IPhotoBook<PhotoBookPage, Photo> _photoBookS;
+- IPhotoBook<PhotoBookPage, Photo> _photoBookM;
+- IPhotoBook<PhotoBookPage, Photo> _photoBookL;
++ Dictionary<string, IPhotoBook<PhotoBookPage, Photo>> PhotoBooks
++ void AddPhotosToBookS(int noOfPhotos)
++ void AddPhotosToBookM(int noOfPhotos)
++ void AddPhotosToBookL(int noOfPhotos)
+- Queue<Photo> GenerateQueueOfPhotos(int noOfPhotos)
++ void Display(int pageNo, int bookType)
+}
+
+IPhotoBook <|.. SingletonPhotoBookS
+IPhotoBook <|.. SingletonPhotoBookM
+IPhotoBook <|.. SingletonPhotoBookL
+
+SingletonPhotoBookS --* PhotoBookPageS
+SingletonPhotoBookM --* PhotoBookPageM
+SingletonPhotoBookL --* PhotoBookPageL
+
+IPhotoBook <.. PhotoBooksController
+Photo <-- PhotoFactory
+PhotoBooksController --> PhotoFactory
+
+Photo o-- PhotoBookPage
+PhotoBookPage o-- IPhotoBook
+
+PhotoBookPage <|-- PhotoBookPageS
+PhotoBookPage <|-- PhotoBookPageM
+PhotoBookPage <|-- PhotoBookPageL
+
+Photo <|-- PhotoBMP
+Photo <|-- PhotoGIF
+Photo <|-- PhotoJPG
+Photo <|-- PhotoPNG
+Photo <|-- PhotoRAW
+Photo <|-- PhotoTIFF
 
 @enduml
