@@ -11,16 +11,24 @@ namespace PhotoBook
 {
     public class PhotoBooksController
     {
-        private PhotoBookS _photoBookS;
-        private PhotoBookM _photoBookM;
-        private PhotoBookL _photoBookL;
+        private IPhotoBook<PhotoBookPage, Photo> _photoBookS;
+        private IPhotoBook<PhotoBookPage, Photo> _photoBookM;
+        private IPhotoBook<PhotoBookPage, Photo> _photoBookL;
+        private Dictionary<string, IPhotoBook<PhotoBookPage, Photo>> _photoBooks;
 
-        public PhotoBooksController(PhotoBookS photoBookS, PhotoBookM photoBookM,
-            PhotoBookL photoBookL)
+        public PhotoBooksController(IPhotoBook<PhotoBookPage, Photo> photoBookS,
+            IPhotoBook<PhotoBookPage, Photo> photoBookM, IPhotoBook<PhotoBookPage, Photo> photoBookL)
         {
             _photoBookS = photoBookS;
             _photoBookM = photoBookM;
             _photoBookL = photoBookL;
+
+            _photoBooks = new Dictionary<string, IPhotoBook<PhotoBookPage, Photo>>()
+            {
+                {"S", _photoBookS},
+                {"M", _photoBookM},
+                {"L", _photoBookL}
+            };
         }
 
         public void AddPhotosToBookS(int noOfPhotos)
@@ -36,23 +44,16 @@ namespace PhotoBook
                 {
                     isAdded = _photoBookS.AddPhotoToPhotoBook(queue.Peek());
                 }
-                
+
                 if (isAdded)
                 {
                     queue.Dequeue();
                 }
-                // TODO
-                Console.WriteLine($"i {i}, queue {queue.Count}");
+
                 i++;
             }
-            
-            // TODO
-            foreach (var page in _photoBookS.Pages)
-            {
-                Console.WriteLine($"Photos no: {page.PhotosPage.Count}");
-            }
         }
-        
+
         public void AddPhotosToBookM(int noOfPhotos)
         {
             var queue = GenerateQueueOfPhotos(noOfPhotos);
@@ -66,24 +67,16 @@ namespace PhotoBook
                 {
                     isAdded = _photoBookM.AddPhotoToPhotoBook(queue.Peek());
                 }
-                
+
                 if (isAdded)
                 {
                     queue.Dequeue();
                 }
-                // TODO
-                Console.WriteLine($"i {i}, queue {queue.Count}");
+
                 i++;
             }
-            
-            // TODO
-            foreach (var page in _photoBookM.Pages)
-            {
-                Console.WriteLine($"Photos no: {page.PhotosPage.Count}");
-            }
-            
         }
-        
+
         public void AddPhotosToBookL(int noOfPhotos)
         {
             var queue = GenerateQueueOfPhotos(noOfPhotos);
@@ -97,22 +90,14 @@ namespace PhotoBook
                 {
                     isAdded = _photoBookL.AddPhotoToPhotoBook(queue.Peek());
                 }
-                
+
                 if (isAdded)
                 {
                     queue.Dequeue();
                 }
-                // TODO
-                Console.WriteLine($"i {i}, queue {queue.Count}");
+
                 i++;
             }
-            
-            // TODO
-            foreach (var page in _photoBookL.Pages)
-            {
-                Console.WriteLine($"Photos no: {page.PhotosPage.Count}");
-            }
-            
         }
 
         private Queue<Photo> GenerateQueueOfPhotos(int noOfPhotos)
@@ -127,124 +112,89 @@ namespace PhotoBook
             return queue;
         }
 
-        public void Display(int pageNo)
+        public void Display(int pageNo, PhotoBookType bookType)
         {
+            IPhotoBook<PhotoBookPage, Photo> photoBook = null;
+
+            switch (bookType)
+            {
+                case PhotoBookType.S:
+                    photoBook = _photoBookS;
+                    break;
+                case PhotoBookType.M:
+                    photoBook = _photoBookM;
+                    break;
+                case PhotoBookType.L:
+                    photoBook = _photoBookL;
+                    break;
+                default:
+                    throw new ArgumentException("This kind of photo book does not exists!");
+            }
+
             const int width = 38;
+            var horizontalLine = $"+{new String('-', width)}+";
 
             pageNo = pageNo - 1;
-            var pageNoS = pageNo < 0 ? 0 : pageNo > _photoBookS.Pages.Count - 1 ? _photoBookS.Pages.Count - 1 : pageNo;
-            var pageNoM = pageNo < 0 ? 0 : pageNo > _photoBookM.Pages.Count - 1 ? _photoBookM.Pages.Count - 1 : pageNo;
-            var pageNoL = pageNo < 0 ? 0 : pageNo > _photoBookL.Pages.Count - 1 ? _photoBookL.Pages.Count - 1 : pageNo;
+            pageNo = pageNo < 0 ? 0 : pageNo > photoBook.Pages.Count - 1 ? photoBook.Pages.Count - 1 : pageNo;
 
             StringBuilder sb = new StringBuilder();
 
-            int allPhotosS = 0;
-            foreach (var page in _photoBookS.Pages)
+            int allPhotos = 0;
+            foreach (var page in photoBook.Pages)
             {
                 var countPagePhotos = page.PhotosPage.Count;
-                allPhotosS += countPagePhotos;
+                allPhotos += countPagePhotos;
             }
 
-            int photoOnPageS = _photoBookS.Pages[pageNo].PhotosPage.Count == 0 ||
-                               _photoBookS.Pages[pageNo].PhotosPage == null
+            int photoOnPage = photoBook.Pages[pageNo].PhotosPage.Count == 0 ||
+                              photoBook.Pages[pageNo].PhotosPage == null
                 ? 0
-                : _photoBookS.Pages[pageNo].PhotosPage.Count;
+                : photoBook.Pages[pageNo].PhotosPage.Count;
 
-            int allPhotosM = 0;
-            foreach (var page in _photoBookM.Pages)
-            {
-                var countPagePhotos = page.PhotosPage.Count;
-                allPhotosM += countPagePhotos;
-            }
+            var bookTitle = $"Photo Book {bookType} no photos: {allPhotos}";
+            var bookTitleLen = bookTitle.Length;
 
-            int photoOnPageM = _photoBookM.Pages[pageNo].PhotosPage.Count == 0 ||
-                               _photoBookM.Pages[pageNo].PhotosPage == null
-                ? 0
-                : _photoBookM.Pages[pageNo].PhotosPage.Count;
+            sb.AppendLine($"{bookTitle}{new String(' ', width - bookTitleLen)}");
 
-            int allPhotosL = 0;
-            foreach (var page in _photoBookL.Pages)
-            {
-                var countPagePhotos = page.PhotosPage.Count;
-                allPhotosL += countPagePhotos;
-            }
+            var noPages = $"Page {pageNo + 1} of {photoBook.Pages.Count} (No of photos: {photoBook.Pages[pageNo].PhotosPage.Count})";
+            var noSPagesLen = noPages.Length;
 
-            int photoOnPageL = _photoBookL.Pages[pageNo].PhotosPage.Count == 0 ||
-                               _photoBookL.Pages[pageNo].PhotosPage == null
-                ? 0
-                : _photoBookL.Pages[pageNo].PhotosPage.Count;
+            sb.AppendLine($"{noPages}{new String(' ', width - noSPagesLen)}");
 
-            var bookSTitle = $"Book S no photos: {allPhotosS}";
-            var bookSTitleLen = bookSTitle.Length;
-            var bookMTitle = $"Book M no photos: {allPhotosM}";
-            var bookMTitleLen = bookMTitle.Length;
-            var bookLTitle = $"Book L no photos: {allPhotosL}";
-            var bookLTitleLen = bookLTitle.Length;
+            sb.AppendLine($"{horizontalLine}");
 
-            sb.Append($"{bookSTitle}{new String(' ', width - bookSTitleLen)}" +
-                      $"{bookMTitle}{new String(' ', width - bookMTitleLen)}" +
-                      $"{bookLTitle}{new String(' ', width - bookLTitleLen)}\n");
-
-            var noSPages = $"Page {pageNoS + 1} of {_photoBookS.Pages.Count}";
-            var noSPagesLen = noSPages.Length;
-            var noMPages = $"Page {pageNoM + 1} of {_photoBookM.Pages.Count}";
-            var noMPagesLen = noMPages.Length;
-            var noLPages = $"Page {pageNoL + 1} of {_photoBookL.Pages.Count}";
-            var noLPagesLen = noLPages.Length;
-
-            sb.Append($"{noSPages}{new String(' ', width - noSPagesLen)}" +
-                      $"{noMPages}{new String(' ', width - noMPagesLen)}" +
-                      $"{noLPages}{new String(' ', width - noLPagesLen)}\n");
-
-            sb.Append($"{new String('-', 37)} {new String('-', 37)} {new String('-', 37)}\n");
-
-            int maxPhotosOnPage = Math.Max(photoOnPageS, Math.Max(photoOnPageM, photoOnPageL));
-
-            if (photoOnPageS == 0 && photoOnPageM == 0 && photoOnPageL == 0)
+            if (photoOnPage == 0)
             {
                 var empty = "| The page is empty";
                 var emptyLen = empty.Length;
-                sb.AppendLine($"{empty}{new String(' ', width - emptyLen - 3)} | " +
-                              $"{empty}{new String(' ', width - emptyLen - 3)} | " +
-                              $"{empty}{new String(' ', width - emptyLen - 3)} |");
-                sb.Append($"{new String('-', 37)} {new String('-', 37)} {new String('-', 37)}\n");
+                sb.AppendLine($"{empty}{new String(' ', width - emptyLen)} | ");
+                sb.AppendLine(horizontalLine);
             }
             else
             {
-                for (int i = 0; i < maxPhotosOnPage; i++)
+                foreach (var photo in photoBook.Pages[pageNo].PhotosPage)
                 {
-                    var lineBulider = "";
-                    if (photoOnPageS == 0)
-                    {
-                        var empty = "| The page is empty";
-                        var emptyLen = empty.Length;
-                        lineBulider += $"{empty}{new String(' ', width - emptyLen - 3)} | ";
-                    }
-                    else
-                    {
-                    }
+                    var photoTitle = $"| Photo title:";
+                    var photoTitleLen = photoTitle.Length;
+                    sb.AppendLine($"{photoTitle}{new String(' ', width - photoTitleLen)} |");
+                    
+                    var photoTitleSec = $"| {photo.Name}";
+                    var photoTitleSecLen = photoTitleSec.Length;
+                    sb.AppendLine($"{photoTitleSec}{new String(' ', width - photoTitleSecLen)} |");
+                    
+                    var photoType = $"| File type: {photo.Type}";
+                    var photoTypeLen = photoType.Length;
+                    sb.AppendLine($"{photoType}{new String(' ', width - photoTypeLen)} |");
+                    
+                    var photoSize = $"| Photo size: {photo.Size}";
+                    var photoSizeLen = photoSize.Length;
+                    sb.AppendLine($"{photoSize}{new String(' ', width - photoSizeLen)} |");
+                    
+                    var photoDate = $"| Creation date: {photo.CreationDate}";
+                    var photoDateLen = photoDate.Length;
+                    sb.AppendLine($"{photoDate}{new String(' ', width - photoDateLen)} |");
 
-                    if (photoOnPageM == 0)
-                    {
-                        var empty = "| The page is empty";
-                        var emptyLen = empty.Length;
-                        lineBulider += $"{empty}{new String(' ', width - emptyLen - 3)} | ";
-                    }
-                    else
-                    {
-                    }
-
-                    if (photoOnPageL == 0)
-                    {
-                        var empty = "| The page is empty";
-                        var emptyLen = empty.Length;
-                        lineBulider += $"{empty}{new String(' ', width - emptyLen - 3)} | ";
-                    }
-                    else
-                    {
-                    }
-
-                    sb.AppendLine(lineBulider);
+                    sb.AppendLine(horizontalLine);
                 }
             }
 

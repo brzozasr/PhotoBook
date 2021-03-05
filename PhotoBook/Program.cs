@@ -1,5 +1,6 @@
 ﻿using System;
 using PhotoBook.PhotoBooks;
+using PhotoBook.Utilities;
 
 namespace PhotoBook
 {
@@ -7,14 +8,14 @@ namespace PhotoBook
     {
         static void Main(string[] args)
         {
-            var pbS = SingletonPhotoBook.CreatePhotoBookS(30);
-            var pbM = SingletonPhotoBook.CreatePhotoBookM(30);
-            var pbL = SingletonPhotoBook.CreatePhotoBookL(30);
-
+            var pbS = SingletonPhotoBookS.GetInstance(32);
+            var pbM = SingletonPhotoBookM.GetInstance(31);
+            var pbL = SingletonPhotoBookL.GetInstance(30);
+            
             PhotoBooksController photoBooksController = new PhotoBooksController(pbS, pbM, pbL);
             
-            photoBooksController.AddPhotosToBookL(190);
-            photoBooksController.Display(1);
+            photoBooksController.AddPhotosToBookL(90);
+            photoBooksController.Display(2, PhotoBookType.L);
         }
     }
 }

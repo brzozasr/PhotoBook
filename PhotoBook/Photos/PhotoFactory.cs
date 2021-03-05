@@ -61,7 +61,7 @@ namespace PhotoBook.Photos
                     bmp.CreationDate = DateTime.Now;
                     return bmp;
                 default:
-                    throw new ArgumentException("This photo type do not on exists!");
+                    throw new ArgumentException("This photo type does not on exists!");
             }
         }
     }

@@ -1,9 +1,4 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Text;
-using PhotoBook.Photos;
-using PhotoBook.Utilities;
 
 namespace PhotoBook.PhotoBooks
 {
