@@ -6,6 +6,5 @@ namespace PhotoBook.PhotoBooks
     {
         public IList<T1> Pages { get; }
         public bool AddPhotoToPhotoBook(T2 photo);
-        public void RemovePhotoFromPhotoBook(T2 photo);
     }
 }

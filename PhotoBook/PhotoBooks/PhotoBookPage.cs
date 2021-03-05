@@ -11,13 +11,5 @@ namespace PhotoBook.PhotoBooks
         public abstract IList<Photo> PhotosPage { get; }
         
         public abstract bool AddPhoto(Photo photo);
-        public abstract void RemovePhoto(Photo photo);
-        public abstract Photo ShowPhotoByName(string name);
-
-        public void Display()
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.Append($"There are {PhotosPage.Count} photos on the page");
-        }
     }
 }

@@ -32,15 +32,5 @@ namespace PhotoBook.PhotoBooks
 
             return false;
         }
-
-        public override void RemovePhoto(Photo photo)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override Photo ShowPhotoByName(string name)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

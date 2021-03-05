@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using PhotoBook.Utilities;
 
 namespace PhotoBook.Photos
@@ -18,7 +19,7 @@ namespace PhotoBook.Photos
                     jpg.Name = Guid.NewGuid().ToString();
                     jpg.Type = PhotoType.JPG;
                     jpg.Size = (PhotoSize) photoSize[photoSizeJpg];
-                    jpg.CreationDate = DateTime.Now;
+                    jpg.CreationDate = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss.fff", CultureInfo.CurrentCulture);
                     return jpg;
                 case (int) PhotoType.PNG:
                     int photoSizePng = Utils.Random.Next(0, 4);
@@ -26,7 +27,7 @@ namespace PhotoBook.Photos
                     png.Name = Guid.NewGuid().ToString();
                     png.Type = PhotoType.PNG;
                     png.Size = (PhotoSize) photoSize[photoSizePng];
-                    png.CreationDate = DateTime.Now;
+                    png.CreationDate = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss.fff", CultureInfo.CurrentCulture);
                     return png;
                 case (int) PhotoType.GIF:
                     int photoSizeGif = Utils.Random.Next(0, 4);
@@ -34,7 +35,7 @@ namespace PhotoBook.Photos
                     gif.Name = Guid.NewGuid().ToString();
                     gif.Type = PhotoType.GIF;
                     gif.Size = (PhotoSize) photoSize[photoSizeGif];
-                    gif.CreationDate = DateTime.Now;
+                    gif.CreationDate = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss.fff", CultureInfo.CurrentCulture);
                     return gif;
                 case (int) PhotoType.TIFF:
                     int photoSizeTiff = Utils.Random.Next(0, 4);
@@ -42,7 +43,7 @@ namespace PhotoBook.Photos
                     tiff.Name = Guid.NewGuid().ToString();
                     tiff.Type = PhotoType.TIFF;
                     tiff.Size = (PhotoSize) photoSize[photoSizeTiff];
-                    tiff.CreationDate = DateTime.Now;
+                    tiff.CreationDate = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss.fff", CultureInfo.CurrentCulture);
                     return tiff;
                 case (int) PhotoType.RAW:
                     int photoSizeRaw = Utils.Random.Next(0, 4);
@@ -50,7 +51,7 @@ namespace PhotoBook.Photos
                     raw.Name = Guid.NewGuid().ToString();
                     raw.Type = PhotoType.RAW;
                     raw.Size = (PhotoSize) photoSize[photoSizeRaw];
-                    raw.CreationDate = DateTime.Now;
+                    raw.CreationDate = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss.fff", CultureInfo.CurrentCulture);
                     return raw;
                 case (int) PhotoType.BMP:
                     int photoSizeBmp = Utils.Random.Next(0, 4);
@@ -58,7 +59,7 @@ namespace PhotoBook.Photos
                     bmp.Name = Guid.NewGuid().ToString();
                     bmp.Type = PhotoType.BMP;
                     bmp.Size = (PhotoSize) photoSize[photoSizeBmp];
-                    bmp.CreationDate = DateTime.Now;
+                    bmp.CreationDate = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss.fff", CultureInfo.CurrentCulture);
                     return bmp;
                 default:
                     throw new ArgumentException("This photo type does not on exists!");

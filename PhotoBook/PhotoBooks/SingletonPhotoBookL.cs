@@ -50,10 +50,5 @@ namespace PhotoBook.PhotoBooks
 
             return false;
         }
-
-        public void RemovePhotoFromPhotoBook(Photo photo)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

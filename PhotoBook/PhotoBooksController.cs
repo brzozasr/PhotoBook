@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using Microsoft.VisualBasic;
 using PhotoBook.PhotoBooks;
 using PhotoBook.Photos;
@@ -14,7 +15,7 @@ namespace PhotoBook
         private IPhotoBook<PhotoBookPage, Photo> _photoBookS;
         private IPhotoBook<PhotoBookPage, Photo> _photoBookM;
         private IPhotoBook<PhotoBookPage, Photo> _photoBookL;
-        private Dictionary<string, IPhotoBook<PhotoBookPage, Photo>> _photoBooks;
+        public Dictionary<string, IPhotoBook<PhotoBookPage, Photo>> PhotoBooks { get; }
 
         public PhotoBooksController(IPhotoBook<PhotoBookPage, Photo> photoBookS,
             IPhotoBook<PhotoBookPage, Photo> photoBookM, IPhotoBook<PhotoBookPage, Photo> photoBookL)
@@ -23,7 +24,7 @@ namespace PhotoBook
             _photoBookM = photoBookM;
             _photoBookL = photoBookL;
 
-            _photoBooks = new Dictionary<string, IPhotoBook<PhotoBookPage, Photo>>()
+            PhotoBooks = new Dictionary<string, IPhotoBook<PhotoBookPage, Photo>>()
             {
                 {"S", _photoBookS},
                 {"M", _photoBookM},
@@ -98,6 +99,8 @@ namespace PhotoBook
 
                 i++;
             }
+            
+            queue.Clear();
         }
 
         private Queue<Photo> GenerateQueueOfPhotos(int noOfPhotos)
@@ -107,31 +110,33 @@ namespace PhotoBook
             for (int i = 0; i < noOfPhotos; i++)
             {
                 queue.Enqueue(PhotoFactory.GetRandomPhoto());
+                // Added to vary the creation time photos
+                Thread.Sleep(1);
             }
 
             return queue;
         }
 
-        public void Display(int pageNo, PhotoBookType bookType)
+        public void Display(int pageNo, int bookType)
         {
             IPhotoBook<PhotoBookPage, Photo> photoBook = null;
 
             switch (bookType)
             {
-                case PhotoBookType.S:
+                case (int) PhotoBookType.S:
                     photoBook = _photoBookS;
                     break;
-                case PhotoBookType.M:
+                case (int) PhotoBookType.M:
                     photoBook = _photoBookM;
                     break;
-                case PhotoBookType.L:
+                case (int) PhotoBookType.L:
                     photoBook = _photoBookL;
                     break;
                 default:
                     throw new ArgumentException("This kind of photo book does not exists!");
             }
 
-            const int width = 38;
+            const int width = 42;
             var horizontalLine = $"+{new String('-', width)}+";
 
             pageNo = pageNo - 1;
@@ -151,7 +156,7 @@ namespace PhotoBook
                 ? 0
                 : photoBook.Pages[pageNo].PhotosPage.Count;
 
-            var bookTitle = $"Photo Book {bookType} no photos: {allPhotos}";
+            var bookTitle = $"Photo Book {(PhotoBookType) bookType}, no photos: {allPhotos}";
             var bookTitleLen = bookTitle.Length;
 
             sb.AppendLine($"{bookTitle}{new String(' ', width - bookTitleLen)}");

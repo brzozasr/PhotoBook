@@ -8,6 +8,6 @@ namespace PhotoBook.Photos
         public abstract string Name { get; set; }
         public abstract PhotoType Type { get; set; }
         public abstract PhotoSize Size { get; set; }
-        public abstract DateTime CreationDate { get; set; }
+        public abstract string CreationDate { get; set; }
     }
 }

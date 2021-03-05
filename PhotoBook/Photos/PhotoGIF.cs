@@ -10,6 +10,6 @@ namespace PhotoBook.Photos
 
         public override PhotoType Type { get; set; }
         public override PhotoSize Size { get; set; }
-        public override DateTime CreationDate { get; set; }
+        public override string CreationDate { get; set; }
     }
 }
