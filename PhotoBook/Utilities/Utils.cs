@@ -4,6 +4,6 @@ namespace PhotoBook.Utilities
 {
     public static class Utils
     {
-        public static Random Random => new();
+        public static readonly Random Random = new();
     }
 }
